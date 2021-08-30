@@ -20,7 +20,7 @@ object KineUnZipHelper {
                 }
                 val name = zipEntry?.name ?: return kineFileInfo
                 val file = File(name)
-                file.writeBytes(zipInputStream.readAllBytes())
+                zipInputStream.copyTo(file.outputStream())
                 kineFileInfo.setKMProjectInputStream(FileInputStream(file))
             }
 

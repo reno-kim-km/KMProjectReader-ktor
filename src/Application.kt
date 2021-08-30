@@ -41,7 +41,7 @@ fun Application.module(testing: Boolean = false) {
                 if (part is PartData.FileItem) {
                     try {
                         val inputFile = File("/tmp/tmp-${part.name}")
-                        inputFile.writeBytes(part.streamProvider().readAllBytes())
+                        part.streamProvider().copyTo(inputFile.outputStream())
 
                         val kmProjectReader = KmProjectReader(inputFile)
                         val kmProtoBuffer = kmProjectReader.getKMProtoBufferJson()
