@@ -1,21 +1,16 @@
-package com.kinemaster
-
-import com.kinemaster.constants.FILE_EXTENSION_KMPROJECT
-import com.kinemaster.data.KineFileInfo
-import io.ktor.http.content.*
+import com.kinemaster.decoder.constants.FILE_EXTENSION_KMPROJECT
+import com.kinemaster.decoder.data.KineFileInfo
 import java.io.File
 import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.lang.Exception
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 
-object ZipHelper {
-    fun unzipKine(fileItem: PartData.FileItem): KineFileInfo {
+object KineUnZipHelper {
+    fun unzipKine(file: File): KineFileInfo {
         val kineFileInfo = KineFileInfo(kmProjectInputStream = null)
 
         try {
-            val zipInputStream = ZipInputStream(fileItem.streamProvider())
+            val zipInputStream = ZipInputStream(file.inputStream())
             var zipEntry: ZipEntry?
 
             while (zipInputStream.nextEntry.also { zipEntry = it } != null) {

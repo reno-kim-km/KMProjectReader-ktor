@@ -1,4 +1,4 @@
-package protobuffer;
+package decoder.protobuffer;
 
 import java.io.*;
 

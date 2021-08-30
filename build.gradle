@@ -16,6 +16,10 @@ group 'com.kinemaster'
 version '0.0.1'
 mainClassName = "io.ktor.server.netty.EngineMain"
 
+application {
+    mainClass = 'com.kinemaster.ApplicationKt'
+}
+
 sourceSets {
     main.kotlin.srcDirs = main.java.srcDirs = ['src']
     test.kotlin.srcDirs = test.java.srcDirs = ['test']

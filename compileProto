@@ -1,3 +1,0 @@
-#!/bin/bash
-
-protoc -I=./ --java_out=./src/ ./kinemaster_project_wire.proto

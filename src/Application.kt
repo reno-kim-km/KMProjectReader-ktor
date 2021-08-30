@@ -1,5 +1,6 @@
 package com.kinemaster
 
+import KmProjectReader
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.html.*
@@ -39,7 +40,10 @@ fun Application.module(testing: Boolean = false) {
             multipart.forEachPart { part ->
                 if (part is PartData.FileItem) {
                     try {
-                        val kmProjectReader = KtorKmProjectReader(part)
+                        val inputFile = File("/tmp/tmp-${part.name}")
+                        inputFile.writeBytes(part.streamProvider().readAllBytes())
+
+                        val kmProjectReader = KmProjectReader(inputFile)
                         val kmProtoBuffer = kmProjectReader.getKMProtoBufferJson()
                         val contentsList = kmProjectReader.getContentsList()
                         val kmProjectName = kmProjectReader.getKMProjectName()

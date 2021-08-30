@@ -1,8 +1,8 @@
-package com.kinemaster.data
+package com.kinemaster.decoder.data
 
 
-import protobuffer.KinemasterProjectWire.KMProto.KMProject
-import protobuffer.KinemasterProjectWire.KMProto.KMProjectHeader
+import decoder.protobuffer.KinemasterProjectWire.KMProto
+import decoder.protobuffer.KinemasterProjectWire.KMProto.KMProjectHeader
 import java.io.InputStream
 
 
@@ -25,5 +25,5 @@ data class KineFileInfo(
 
 data class KMProtoBuffer(
     val header: KMProjectHeader,
-    val project: KMProject
+    val project: KMProto.KMProject
 )

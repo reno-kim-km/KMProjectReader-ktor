@@ -1,22 +1,23 @@
-package com.kinemaster
-
-import com.kinemaster.constants.*
-import com.kinemaster.data.KMProtoBuffer
-import com.kinemaster.data.KineFileInfo
-import io.ktor.http.content.*
-import protobuffer.HeaderDelimitedInputStream
-import protobuffer.KinemasterProjectWire
+import com.kinemaster.decoder.constants.*
+import com.kinemaster.decoder.constants.FOURCC_FTRX
+import com.kinemaster.decoder.constants.FOURCC_KHDR
+import com.kinemaster.decoder.data.KMProtoBuffer
+import com.kinemaster.decoder.data.KineFileInfo
+import com.kinemaster.getSigBytes
+import decoder.protobuffer.HeaderDelimitedInputStream
+import decoder.protobuffer.KinemasterProjectWire
 import java.io.BufferedInputStream
+import java.io.File
 
-class KtorKmProjectReader(private val fileItem: PartData.FileItem) : KmProjectReader {
+class KmProjectReader(private val file: File) : IKmProjectReader {
     private var kineFileInfo: KineFileInfo? = null
 
     override fun getContentsList(): ArrayList<String> {
-        val name = fileItem.originalFileName!!
+        val name = file.name
 
         if (name.endsWith(FILE_EXTENSION_KINE)) {
             if (kineFileInfo == null) {
-                kineFileInfo = ZipHelper.unzipKine(fileItem)
+                kineFileInfo = KineUnZipHelper.unzipKine(file)
             }
 
             return kineFileInfo?.getContentList() ?: arrayListOf()
@@ -26,13 +27,13 @@ class KtorKmProjectReader(private val fileItem: PartData.FileItem) : KmProjectRe
     }
 
     override fun getKMProtoBufferJson(): String {
-        val name = fileItem.originalFileName!!
+        val name = file.name
         val inputStream = when {
             name.endsWith(FILE_EXTENSION_KMPROJECT) -> {
-                fileItem.streamProvider()
+                file.inputStream()
             }
             name.endsWith(FILE_EXTENSION_KINE) -> {
-                kineFileInfo = ZipHelper.unzipKine(fileItem)
+                kineFileInfo = KineUnZipHelper.unzipKine(file)
                 kineFileInfo?.getKMProjectInputStream()
             }
             else -> {
@@ -77,11 +78,11 @@ class KtorKmProjectReader(private val fileItem: PartData.FileItem) : KmProjectRe
         return result
     }
 
-    override fun getKMProjectName(): String = fileItem.originalFileName!!
+    override fun getKMProjectName(): String = file.name
 
 }
 
-interface KmProjectReader {
+interface IKmProjectReader {
     fun getContentsList(): ArrayList<String>
     fun getKMProtoBufferJson(): String
     fun getKMProjectName(): String

@@ -1,6 +1,6 @@
 syntax = "proto2";
 
-option java_package = "protobuffer";
+option java_package = "decoder.protobuffer";
 // KineMaster Project File General Structure
 // 
 // A KineMaster project file starts with a short 

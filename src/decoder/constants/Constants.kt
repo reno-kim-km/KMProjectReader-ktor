@@ -1,6 +1,7 @@
-package com.kinemaster.constants
+package com.kinemaster.decoder.constants
 
-import protobuffer.FourCC
+import decoder.protobuffer.FourCC
+
 
 const val FILE_EXTENSION_KINE = "kine"
 const val FILE_EXTENSION_KMPROJECT = "kmproject"
