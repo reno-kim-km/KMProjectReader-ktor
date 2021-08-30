@@ -31,7 +31,7 @@ fun Application.module(testing: Boolean = false) {
                 }
             }
         }
-
+        // for test
         post("/submit") {
             val multipart = call.receiveMultipart()
             var name = "Unknown"
