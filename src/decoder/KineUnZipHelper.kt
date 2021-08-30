@@ -8,6 +8,7 @@ import java.util.zip.ZipInputStream
 object KineUnZipHelper {
     fun unzipKine(file: File): KineFileInfo {
         val kineFileInfo = KineFileInfo(kmProjectInputStream = null)
+        var tmpFile: File? = null
 
         try {
             val zipInputStream = ZipInputStream(file.inputStream())
@@ -19,14 +20,15 @@ object KineUnZipHelper {
                     continue
                 }
                 val name = zipEntry?.name ?: return kineFileInfo
-                val file = File(name)
-                zipInputStream.copyTo(file.outputStream())
-                kineFileInfo.setKMProjectInputStream(FileInputStream(file))
+                tmpFile = File(name)
+                zipInputStream.copyTo(tmpFile.outputStream())
+                kineFileInfo.setKMProjectInputStream(FileInputStream(tmpFile))
             }
 
         } catch (exception: Exception) {
             exception.printStackTrace()
         } finally {
+            tmpFile?.delete()
             return kineFileInfo
         }
 

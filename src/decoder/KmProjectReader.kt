@@ -1,6 +1,4 @@
 import com.kinemaster.decoder.constants.*
-import com.kinemaster.decoder.constants.FOURCC_FTRX
-import com.kinemaster.decoder.constants.FOURCC_KHDR
 import com.kinemaster.decoder.data.KMProtoBuffer
 import com.kinemaster.decoder.data.KineFileInfo
 import com.kinemaster.getSigBytes

@@ -24,7 +24,7 @@ fun Application.module(testing: Boolean = false) {
             call.respondHtml {
                 body {
                     h1 { +"KMProject Reader" }
-                    form(action = "/submit", encType = FormEncType.multipartFormData, method = FormMethod.post) {
+                    form(action = "/json", encType = FormEncType.multipartFormData, method = FormMethod.post) {
                         input(type = InputType.file, name = "file")
                         input(type = InputType.submit)
                     }
@@ -32,15 +32,17 @@ fun Application.module(testing: Boolean = false) {
             }
         }
         // for test
-        post("/submit") {
+        post("/json") {
             val multipart = call.receiveMultipart()
             var name = "Unknown"
             val sig = ByteArray(4)
 
             multipart.forEachPart { part ->
                 if (part is PartData.FileItem) {
+                    var inputFile: File? = null
+                    var resultFile: File? = null
                     try {
-                        val inputFile = File("/tmp/tmp-${part.name}")
+                        inputFile = File("/tmp/${part.originalFileName}")
                         part.streamProvider().copyTo(inputFile.outputStream())
 
                         val kmProjectReader = KmProjectReader(inputFile)
@@ -48,12 +50,10 @@ fun Application.module(testing: Boolean = false) {
                         val contentsList = kmProjectReader.getContentsList()
                         val kmProjectName = kmProjectReader.getKMProjectName()
 
-                        val file = File("/tmp/${kmProjectName}.txt")
-                        file.writeText(kmProtoBuffer)
-                        call.response.header("Content-Disposition", "attachment; filename=\"${file.name}\"")
-                        call.respondFile(file)
-                        file.delete()
-
+                        resultFile = File("/tmp/${kmProjectName}.txt")
+                        resultFile.writeText(kmProtoBuffer)
+                        call.response.header("Content-Disposition", "attachment; filename=\"${resultFile.name}\"")
+                        call.respondFile(resultFile)
                     } catch (exception: Exception) {
                         exception.printStackTrace()
                         call.respondHtml {
@@ -64,6 +64,9 @@ fun Application.module(testing: Boolean = false) {
                                 }
                             }
                         }
+                    } finally {
+                        inputFile?.delete()
+                        resultFile?.delete()
                     }
                 }
             }
