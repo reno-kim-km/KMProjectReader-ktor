@@ -25,10 +25,10 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @Suppress("unused") // Referenced in application.conf
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
-    install(AutoHeadResponse)
-    install(Sessions) {
-        cookie<UserSession>("user_session")
-    }
+//    install(AutoHeadResponse)
+//    install(Sessions) {
+//        cookie<UserSession>("user_session")
+//    }
 
     val httpClient = HttpClient(CIO) {
         install(JsonFeature) {
@@ -36,75 +36,75 @@ fun Application.module(testing: Boolean = false) {
         }
     }
 
-    install(Authentication) {
-        oauth("auth-oauth-google") {
-            urlProvider = { "$HOST_URL/callback" }
-            providerLookup = {
-                OAuthServerSettings.OAuth2ServerSettings(
-                    name = "google",
-                    authorizeUrl = "https://accounts.google.com/o/oauth2/auth",
-                    accessTokenUrl = "https://accounts.google.com/o/oauth2/token",
-                    requestMethod = HttpMethod.Post,
-                    clientId = "1024719495486-dpkhogop1csl1j56074s0tuq1ovoai34.apps.googleusercontent.com",
-                    clientSecret = "4aH_qwE5lHn5szMQTpnbpH6j",
-                    defaultScopes = listOf(
-                        "https://www.googleapis.com/auth/userinfo.profile",
-                        "https://www.googleapis.com/auth/userinfo.email"
-                    )
-                )
-            }
-            client = httpClient
-        }
-    }
+//    install(Authentication) {
+//        oauth("auth-oauth-google") {
+//            urlProvider = { "$HOST_URL/callback" }
+//            providerLookup = {
+//                OAuthServerSettings.OAuth2ServerSettings(
+//                    name = "google",
+//                    authorizeUrl = "https://accounts.google.com/o/oauth2/auth",
+//                    accessTokenUrl = "https://accounts.google.com/o/oauth2/token",
+//                    requestMethod = HttpMethod.Post,
+//                    clientId = "1024719495486-dpkhogop1csl1j56074s0tuq1ovoai34.apps.googleusercontent.com",
+//                    clientSecret = "4aH_qwE5lHn5szMQTpnbpH6j",
+//                    defaultScopes = listOf(
+//                        "https://www.googleapis.com/auth/userinfo.profile",
+//                        "https://www.googleapis.com/auth/userinfo.email"
+//                    )
+//                )
+//            }
+//            client = httpClient
+//        }
+//    }
 
     routing {
-        routing {
-            authenticate("auth-oauth-google") {
-                get("/login") {
-                    // Redirects to 'authorizeUrl' automatically
-                }
+//        routing {
+//            authenticate("auth-oauth-google") {
+//                get("/login") {
+//                    // Redirects to 'authorizeUrl' automatically
+//                }
+//
+//                get("/callback") {
+//                    val principal: OAuthAccessTokenResponse.OAuth2? = call.principal()
+//                    call.sessions.set(UserSession(principal?.accessToken.toString()))
+//                    call.respondRedirect("/checkKineMasterUser")
+//                }
+//            }
+//        }
+//
+//        get("/checkKineMasterUser") {
+//            val userSession: UserSession? = call.sessions.get<UserSession>()
+//            if (userSession != null) {
+//                val userInfo: UserInfo = httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
+//                    headers {
+//                        append(HttpHeaders.Authorization, "Bearer ${userSession.token}")
+//                    }
+//                }
+//                if (userInfo.email.contains("kinemaster.com")) {
+//                    call.respondRedirect("/input")
+//                    return@get
+//                }
+//            }
+//
+//            call.respondText("Sorry, you can't use this service (only KineMaster Employees")
+//        }
 
-                get("/callback") {
-                    val principal: OAuthAccessTokenResponse.OAuth2? = call.principal()
-                    call.sessions.set(UserSession(principal?.accessToken.toString()))
-                    call.respondRedirect("/checkKineMasterUser")
-                }
-            }
-        }
 
-        get("/checkKineMasterUser") {
-            val userSession: UserSession? = call.sessions.get<UserSession>()
-            if (userSession != null) {
-                val userInfo: UserInfo = httpClient.get("https://www.googleapis.com/oauth2/v2/userinfo") {
-                    headers {
-                        append(HttpHeaders.Authorization, "Bearer ${userSession.token}")
-                    }
-                }
-                if (userInfo.email.contains("kinemaster.com")) {
-                    call.respondRedirect("/input")
-                    return@get
-                }
-            }
-
-            call.respondText("Sorry, you can't use this service (only KineMaster Employees")
-        }
-
-
+//        get("/") {
+//            call.respondHtml {
+//                body {
+//                    h1 { +"KMProject Reader" }
+//                    div {
+//                        +"please login first!"
+//                        br
+//                        a(href = "/login") {
+//                            +"Google Sign-In"
+//                        }
+//                    }
+//                }
+//            }
+//        }
         get("/") {
-            call.respondHtml {
-                body {
-                    h1 { +"KMProject Reader" }
-                    div {
-                        +"please login first!"
-                        br
-                        a(href = "/login") {
-                            +"Google Sign-In"
-                        }
-                    }
-                }
-            }
-        }
-        get("/input") {
             call.respondHtml {
                 body {
                     h1 { +"KMProject Reader" }
