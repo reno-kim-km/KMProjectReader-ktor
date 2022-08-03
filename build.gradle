@@ -53,6 +53,7 @@ dependencies {
     implementation "com.google.protobuf:protobuf-java:3.8.0"
     //gson
     implementation "io.ktor:ktor-gson:$ktor_version"
+    implementation 'com.google.code.gson:gson:2.9.1'
 }
 
 tasks.create("stage") {
